@@ -25,7 +25,7 @@ func BenchmarkDecimalFromString(b *testing.B) {
 		buf = strconv.AppendInt(nil, int64(intg), 10)
 		if frac > 0 {
 			buf = append(buf, '.')
-			buf = strconv.AppendInt(nil, int64(frac), 10)
+			buf = strconv.AppendInt(buf, int64(frac), 10)
 		}
 		inputStrings[i] = string(buf)
 		inputBytes[i] = []byte(inputStrings[i])
@@ -87,7 +87,7 @@ func BenchmarkDecimalToString(b *testing.B) {
 		buf = strconv.AppendInt(nil, int64(intg), 10)
 		if frac > 0 {
 			buf = append(buf, '.')
-			buf = strconv.AppendInt(nil, int64(frac), 10)
+			buf = strconv.AppendInt(buf, int64(frac), 10)
 		}
 		s := string(buf)
 		fxd.DecimalFromBytesString(buf, &input1[i])
@@ -137,11 +137,12 @@ func BenchmarkDecimalArithPos(b *testing.B) {
 			buf = strconv.AppendInt(nil, int64(intg), 10)
 			if frac > 0 {
 				buf = append(buf, '.')
-				buf = strconv.AppendInt(nil, int64(frac), 10)
+				buf = strconv.AppendInt(buf, int64(frac), 10)
 			}
 			s := string(buf)
 			fxd.DecimalFromBytesString(buf, &input1[i][j])
 			input2[i][j] = *types.NewDecFromStringForTest(s)
+			// fmt.Printf("input=%v\n", s)
 		}
 	}
 	var fdRes fxd.FixedDecimal
@@ -284,16 +285,19 @@ func BenchmarkDecimalArithNeg(b *testing.B) {
 		for j := 0; j < 2; j++ {
 			intg := rand.Int31n(1 << 30)
 			frac := rand.Int31n(1 << 20)
+			buf = buf[:0]
 			if j == 1 {
-				buf = strconv.AppendInt([]byte("-"), int64(intg), 10)
+				buf = append(buf, '-')
 			}
+			buf = strconv.AppendInt(buf, int64(intg), 10)
 			if frac > 0 {
 				buf = append(buf, '.')
-				buf = strconv.AppendInt(nil, int64(frac), 10)
+				buf = strconv.AppendInt(buf, int64(frac), 10)
 			}
 			s := string(buf)
 			fxd.DecimalFromBytesString(buf, &input1[i][j])
 			input2[i][j] = *types.NewDecFromStringForTest(s)
+			// fmt.Printf("input=%v\n", s)
 		}
 	}
 	var fdRes fxd.FixedDecimal
@@ -443,7 +447,7 @@ func BenchmarkDecimalCompare(b *testing.B) {
 			buf = strconv.AppendInt(nil, int64(intg), 10)
 			if frac > 0 {
 				buf = append(buf, '.')
-				buf = strconv.AppendInt(nil, int64(frac), 10)
+				buf = strconv.AppendInt(buf, int64(frac), 10)
 			}
 			s := string(buf)
 			fxd.DecimalFromBytesString(buf, &input1[i][j])
@@ -503,7 +507,7 @@ func BenchmarkDecimalRound(b *testing.B) {
 		buf = strconv.AppendInt(nil, int64(intg), 10)
 		if frac > 0 {
 			buf = append(buf, '.')
-			buf = strconv.AppendInt(nil, int64(frac), 10)
+			buf = strconv.AppendInt(buf, int64(frac), 10)
 		}
 		s := string(buf)
 		fxd.DecimalFromBytesString(buf, &input1[i])

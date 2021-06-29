@@ -11,3 +11,5 @@ require (
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	golang.org/x/text v0.3.6 // indirect
 )
+
+replace github.com/jiangzhe/fxd => ../fxd
