@@ -55,7 +55,7 @@ func BenchmarkDecimalFromInfString(b *testing.B) {
 			_ = input[n-1]
 			_ = output1[n-1]
 			for j := 0; j < n; j++ {
-				if err := fxd.DecimalFromAsciiString(input[j], &output1[j]); err != nil {
+				if err := output1[j].FromAsciiString(input[j], true); err != nil {
 					b.Fatal("failed")
 				}
 			}
@@ -69,7 +69,7 @@ func BenchmarkDecimalFromInfString(b *testing.B) {
 			_ = input[n-1]
 			_ = output1[n-1]
 			for j := 0; j < n; j++ {
-				if err := fxd.DecimalFromBytesString(input[j], &output1[j]); err != nil {
+				if err := output1[j].FromBytesString(input[j], true); err != nil {
 					b.Fatal("failed")
 				}
 			}

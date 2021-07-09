@@ -40,7 +40,7 @@ func BenchmarkDecimalFromString(b *testing.B) {
 			_ = input[n-1]
 			_ = output1[n-1]
 			for j := 0; j < n; j++ {
-				if err := fxd.DecimalFromAsciiString(input[j], &output1[j]); err != nil {
+				if err := output1[j].FromAsciiString(input[j], true); err != nil {
 					b.Fatal("failed")
 				}
 			}
@@ -54,7 +54,7 @@ func BenchmarkDecimalFromString(b *testing.B) {
 			_ = input[n-1]
 			_ = output1[n-1]
 			for j := 0; j < n; j++ {
-				if err := fxd.DecimalFromBytesString(input[j], &output1[j]); err != nil {
+				if err := output1[j].FromBytesString(input[j], true); err != nil {
 					b.Fatal("failed")
 				}
 			}
@@ -90,7 +90,7 @@ func BenchmarkDecimalToString(b *testing.B) {
 			buf = strconv.AppendInt(buf, int64(frac), 10)
 		}
 		s := string(buf)
-		fxd.DecimalFromBytesString(buf, &input1[i])
+		input1[i].FromBytesString(buf, true)
 		input2[i] = *types.NewDecFromStringForTest(s)
 	}
 	b.ResetTimer()
@@ -140,9 +140,8 @@ func BenchmarkDecimalArithPos(b *testing.B) {
 				buf = strconv.AppendInt(buf, int64(frac), 10)
 			}
 			s := string(buf)
-			fxd.DecimalFromBytesString(buf, &input1[i][j])
+			input1[i][j].FromBytesString(buf, true)
 			input2[i][j] = *types.NewDecFromStringForTest(s)
-			// fmt.Printf("input=%v\n", s)
 		}
 	}
 	var fdRes fxd.FixedDecimal
@@ -295,9 +294,8 @@ func BenchmarkDecimalArithNeg(b *testing.B) {
 				buf = strconv.AppendInt(buf, int64(frac), 10)
 			}
 			s := string(buf)
-			fxd.DecimalFromBytesString(buf, &input1[i][j])
+			input1[i][j].FromBytesString(buf, true)
 			input2[i][j] = *types.NewDecFromStringForTest(s)
-			// fmt.Printf("input=%v\n", s)
 		}
 	}
 	var fdRes fxd.FixedDecimal
@@ -450,7 +448,7 @@ func BenchmarkDecimalCompare(b *testing.B) {
 				buf = strconv.AppendInt(buf, int64(frac), 10)
 			}
 			s := string(buf)
-			fxd.DecimalFromBytesString(buf, &input1[i][j])
+			input1[i][j].FromBytesString(buf, true)
 			input2[i][j] = *types.NewDecFromStringForTest(s)
 		}
 		expected[i] = input1[i][0].Compare(&input1[i][1])
@@ -510,7 +508,7 @@ func BenchmarkDecimalRound(b *testing.B) {
 			buf = strconv.AppendInt(buf, int64(frac), 10)
 		}
 		s := string(buf)
-		fxd.DecimalFromBytesString(buf, &input1[i])
+		input1[i].FromBytesString(buf, true)
 		input2[i] = *types.NewDecFromStringForTest(s)
 	}
 	b.ResetTimer()
